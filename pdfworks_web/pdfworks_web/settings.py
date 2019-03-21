@@ -8,6 +8,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 ALLOWED_HOSTS = ['pdfworks.org']
+if DEBUG:
+    ALLOWED_HOSTS += ['127.0.0.1']
 
 # Application definition
 
