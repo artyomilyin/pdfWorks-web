@@ -3,13 +3,11 @@
 {% block title %}pdfWorks - Split PDF{% endblock %}
 
 {% block content %}
-<h1>Coming soon...</h1>
-<hr>
-<div class="dropzone"></div>
-
-
-<script>$(".dropzone").dropzone({
-  url: 'upload.php'
-})</script>
+<h3>Split single PDF page by page.</h3>
+<form action="." class="dropzone" method="post" id="split-dropzone">
+	{% csrf_token %}
+</form>
+<button class="btn btn-primary" type="submit">Submit</button>
 
 {% endblock %}
+
