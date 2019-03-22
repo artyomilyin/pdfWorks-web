@@ -4,10 +4,10 @@
 
 {% block content %}
 <h3>Split single PDF page by page.</h3>
-<form action="." class="dropzone" method="post" id="split-dropzone">
+<form action="/{{ section }}/" class="dropzone" method="post" id="split-dropzone">
 	{% csrf_token %}
 </form>
-<button class="btn btn-primary" type="submit">Submit</button>
+<button class="btn btn-primary" type="submit" form="split-dropzone" name="submit">Submit</button>
 
 {% endblock %}
 

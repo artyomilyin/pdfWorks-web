@@ -4,12 +4,9 @@
 
 {% block content %}
 <h3>Merge images and PDF files to a single PDF file.</h3>
-
-<div class="dropzone"></div>
-
-<script>$(".dropzone").dropzone({
-	width: 800,
-  text: 'Drop files you want to merge here or click to select.'
-})</script>
+<form action="/{{ section }}/" class="dropzone" method="post" id="merge-dropzone">
+	{% csrf_token %}
+</form>
+<button class="btn btn-primary" type="submit" form="merge-dropzone" name="submit">Convert and merge</button>
 
 {% endblock %}

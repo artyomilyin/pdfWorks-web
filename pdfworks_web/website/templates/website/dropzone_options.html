@@ -1,0 +1,19 @@
+<script>
+Dropzone.options.splitDropzone = {
+	url: "/{{ section }}/",
+	paramName: "file", // The name that will be used to transfer the file
+  maxFiles: 1,
+  addRemoveLinks: true,
+  acceptedFiles: '.pdf',
+  dictInvalidFileType: 'Only PDF file can be uploaded',
+};
+
+Dropzone.options.mergeDropzone = {
+	url: "/{{ section }}/",
+	paramName: "file", // The name that will be used to transfer the file
+  addRemoveLinks: true,
+  acceptedFiles: '.pdf, .jpg',
+  dictInvalidFileType: 'Only Images and PDF files can be uploaded',
+};
+
+</script>

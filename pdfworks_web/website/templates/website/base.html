@@ -21,7 +21,8 @@
 	        crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="{% static '/css/dropzone.css' %}">
 	<script src="{% static '/js/dropzone.js' %}"></script>
-	<script src="{% static '/js/dropzone_options.js' %}"></script>
+	<!--script src="{% static '/js/dropzone_options.html' %}"></script-->
+	{% include 'website/dropzone_options.html' %}
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
