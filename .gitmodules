@@ -1,0 +1,6 @@
+[submodule "pdfworks_web/website/lib/pdfworks-lib"]
+	path = pdfworks_web/website/lib/pdfworks-lib
+	url = https://artyom_ilyin@bitbucket.org/artyom_ilyin/pdfworks-lib.git
+[submodule "pdfworks_web/website/lib/pdfworks_lib"]
+	path = pdfworks_web/website/lib/pdfworks_lib
+	url = https://artyom_ilyin@bitbucket.org/artyom_ilyin/pdfworks-lib.git
