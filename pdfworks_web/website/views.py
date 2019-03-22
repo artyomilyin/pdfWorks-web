@@ -14,6 +14,9 @@ def merge(request):
 
 
 def split(request):
+    if request.method == "POST":
+        print("it's POST!")
+        print(request)
     return render(request,
                   'website/split.html',
                   {'section': 'split'})
