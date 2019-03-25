@@ -12,3 +12,6 @@ class UploadedFile(models.Model):
 
     request_session = models.ForeignKey(RequestFiles, on_delete=models.CASCADE, related_name='uploaded_files')
     filename = models.FileField(upload_to=define_upload_path)
+
+    class Meta:
+        ordering = ('id',)
