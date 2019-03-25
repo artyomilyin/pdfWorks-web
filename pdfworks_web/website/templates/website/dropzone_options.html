@@ -1,0 +1,49 @@
+<script>
+Dropzone.options.splitDropzone = {
+	url: "/{{ section }}/",
+	paramName: "file", // The name that will be used to transfer the file
+  maxFiles: 1,
+  addRemoveLinks: true,
+  acceptedFiles: '.pdf',
+  dictInvalidFileType: 'Only PDF file can be uploaded',
+};
+
+Dropzone.options.mergeDropzone = {
+	url: "/{{ section }}/",
+	paramName: "file",
+	maxFilesize: 200,
+	maxFiles: 20,
+  addRemoveLinks: true,
+  acceptedFiles: '.pdf, .jpg, .jpeg, .png',
+
+  dictInvalidFileType: 'Only [.pdf, .jpg, .jpeg, .png] files can be uploaded',
+  dictDefaultMessage: 'Drop files here to upload',
+  dictFileTooBig: 'Max file size is 200 Mb',
+  dictMaxFilesExceeded: 'You can upload 20 files only',
+
+  init: function() {
+    this.on("addedfile", function(file) {
+      el = $(file.previewElement);
+      el.attr("file_uuid", uuidv1());
+      $('#merge-dropzone-submit-btn').addClass('disabled')
+        .attr("rel", "tooltip")
+        .attr("data-title", "Upload some files first");
+    });
+    this.on("sending", function(file, xhr, form) {
+      el = $(file.previewElement);
+      form.append("file_uuid", el.attr("file_uuid"));
+    });
+    this.on("queuecomplete", function(e) {
+      $('#merge-dropzone-submit-btn').removeClass("disabled").attr("rel", null).attr("data-title", null);
+    });
+    this.on("removedfile", function(e) {
+      if ($('#merge-dropzone>div.dz-success').length == 0){
+        $('#merge-dropzone-submit-btn').addClass('disabled')
+        .attr("rel", "tooltip")
+        .attr("data-title", "Upload some files first");
+      }
+    });
+  }
+};
+
+</script>

@@ -1,0 +1,2 @@
+TODO: SEO-friendly urls
+TODO: toasts with messages
