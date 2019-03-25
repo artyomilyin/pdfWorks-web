@@ -14,7 +14,8 @@ class RequestFiles(models.Model):
     def delete(self, output_filename=None, using=None, keep_parents=False):
         if self.uploaded_files:
             shutil.rmtree(f'uploads/{self.csrf_id}')
-            os.remove(output_filename)
+            if output_filename:
+                os.remove(output_filename)
         super(RequestFiles, self).delete(using=using, keep_parents=keep_parents)
 
     class Meta:
