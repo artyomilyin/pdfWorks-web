@@ -43,7 +43,7 @@ def merge(request):
                         save_filename = "%s.pdf" % request.POST['output_filename']
                     else:
                         save_filename = "pdfWorks.org_%s.pdf" % request_files_object.csrf_id[:8]
-                    response['Content-Disposition'] = f'attachment; filename="{save_filename}"'
+                    response['Content-Disposition'] = 'attachment; filename="%s"' % save_filename
                     request_files_object.delete(output_filename=filesys_output_filename)
                 return response
         else:
