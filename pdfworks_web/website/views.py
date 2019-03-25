@@ -29,7 +29,7 @@ def merge(request):
             except ObjectDoesNotExist:
                 return HttpResponse("You haven't uploaded any files")
             if request_files_object:
-                print(f"request object is: {request_files_object}")
+                print("request object is: %s" % request_files_object)
                 order_array = request.POST['order_array'].split(',')
                 preserved = Case(*[When(uuid=uuid, then=pos) for pos, uuid in enumerate(order_array)])
                 files_objects = request_files_object.uploaded_files.filter(uuid__in=order_array).order_by(preserved)
@@ -40,9 +40,9 @@ def merge(request):
                     response = HttpResponse(file_to_send, 'text/html')
                     # response['Content-Length'] = file_to_send.size
                     if request.POST['output_filename'] != '':
-                        save_filename = f"{request.POST['output_filename']}.pdf"
+                        save_filename = "%s.pdf" % request.POST['output_filename']
                     else:
-                        save_filename = f"pdfWorks.org_{request_files_object.csrf_id[:8]}.pdf"
+                        save_filename = "pdfWorks.org_%s.pdf" % request_files_object.csrf_id[:8]
                     response['Content-Disposition'] = f'attachment; filename="{save_filename}"'
                     request_files_object.delete(output_filename=filesys_output_filename)
                 return response
@@ -56,8 +56,8 @@ def merge(request):
             uploaded_file.filename.save(str(request.FILES['file']), ContentFile(request.FILES['file'].read()))
             uploaded_file.uuid = request.POST['file_uuid']
             uploaded_file.save()
-            print(f"csrf_id: {request_files_object.csrf_id}")
-            print(f"file uploaded: {uploaded_file.filename} with uuid: {uploaded_file.uuid}")
+            print("csrf_id: %s" % request_files_object.csrf_id)
+            print("file uploaded: %s with uuid: %s" % (uploaded_file.filename, uploaded_file.uuid))
     return render(request,
                   'website/merge.html',
                   {'section': 'merge'})
@@ -75,19 +75,19 @@ def split(request):
             except ObjectDoesNotExist:
                 return HttpResponse("You haven't uploaded any files")
             if request_files_object:
-                print(f"request object is: {request_files_object}")
+                print("request object is: %s" % request_files_object)
                 files_list = [file.filename.name for file in request_files_object.uploaded_files.all()]
                 print(files_list)
                 # request_files_object.delete()
-                return HttpResponse(f"It's okay, files: {files_list}")
+                return HttpResponse("It's okay, files: %s" % files_list)
         else:
             try:
                 request_files_object = RequestFiles.objects.get(csrf_id=request.POST['csrfmiddlewaretoken'])
             except ObjectDoesNotExist:
                 request_files_object = RequestFiles(csrf_id=request.POST['csrfmiddlewaretoken'])
                 request_files_object.save()
-                print(f"new object created with sid {request_files_object.csrf_id}")
-            print(f"csrf_id: {request_files_object.csrf_id}")
+                print("new object created with sid %s" % request_files_object.csrf_id)
+            print("csrf_id: %s" % request_files_object.csrf_id)
             uploaded_file = UploadedFile(request_session=request_files_object)
             uploaded_file.filename.save(str(request.FILES['file']), ContentFile(request.FILES['file'].read()))
             uploaded_file.save()

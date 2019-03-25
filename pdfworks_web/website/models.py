@@ -9,11 +9,11 @@ class RequestFiles(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.csrf_id} request"
+        return "%s request" % self.csrf_id
 
     def delete(self, output_filename=None, using=None, keep_parents=False):
         if self.uploaded_files:
-            shutil.rmtree(f'uploads/{self.csrf_id}')
+            shutil.rmtree('uploads/%s' % self.csrf_id)
             if output_filename:
                 os.remove(output_filename)
         super(RequestFiles, self).delete(using=using, keep_parents=keep_parents)
@@ -25,7 +25,7 @@ class RequestFiles(models.Model):
 class UploadedFile(models.Model):
 
     def define_upload_path(self, filename):
-        return f"uploads/{self.request_session.csrf_id}/{filename}"
+        return "uploads/%s/%s" % (self.request_session.csrf_id, filename)
 
     request_session = models.ForeignKey(RequestFiles, on_delete=models.CASCADE, related_name='uploaded_files')
     filename = models.FileField(upload_to=define_upload_path)
