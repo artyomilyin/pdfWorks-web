@@ -16,7 +16,7 @@ def homepage(request):
 def merge(request):
     def merge_lib_call(input_files_list, output_filename):
         converter = Converter()
-        output = f"output/{output_filename}.pdf"
+        output = "output/%s.pdf" % output_filename
         converter.convert(input_files_list, output)
         return output
 
