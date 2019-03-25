@@ -1,4 +1,5 @@
 {% extends 'website/base.html' %}
+{% load static %}
 
 {% block title %}pdfWorks - Images and PDF converter{% endblock %}
 
@@ -7,6 +8,18 @@
 <form action="/{{ section }}/" class="dropzone" method="post" id="merge-dropzone">
 	{% csrf_token %}
 </form>
-<button class="btn btn-primary" type="submit" form="merge-dropzone" name="submit">Convert and merge</button>
+<div class="row p-3">
+	<button id="merge-dropzone-submit-btn" class="col btn btn-primary disabled"
+	        rel="tooltip" data-title="Upload some files first"
+	        type="submit" form="merge-dropzone">Convert and merge</button>
+	<div class="col-9 pr-0">
+		<label for="output_filename">Output filename:</label>
+		<input type="text" class="form-control" id="output_filename" name="output_filename"
+		       placeholder="without extension, leave empty for default" form="merge-dropzone">
+	</div>
+</div>
+{% endblock %}
 
+{% block javascript %}
+<script src="{% static '/js/merge_js_block.js' %}"></script>
 {% endblock %}

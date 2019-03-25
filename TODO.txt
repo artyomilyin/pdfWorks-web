@@ -1,5 +1,4 @@
-TODO: if user removes file from the list, the file should be removed from backend too
-TODO: orderable files
 TODO: cron to clear old files (if submit was not pressed)
-TODO: rename "IMG to PDF" entry
-TODO: good output filename for merge tab
+TODO: files restrictions (size, number, etc)
+TODO: SEO-friendly urls
+TODO: toasts with messages

@@ -1,21 +1,16 @@
-import os
-import shutil
-
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
+from django.db.models import Case, When
 from django.http.response import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from .lib.pdfworks_lib.pdfworks import Converter
 
 from .models import RequestFiles, UploadedFile
 
 
-
 def homepage(request):
-    return render(request,
-                  'website/homepage.html',
-                  {'section': 'merge'})
+    return redirect('merge/')
 
 
 def merge(request):
@@ -26,24 +21,30 @@ def merge(request):
         return output
 
     if request.method == "POST":
-        if 'submit' in request.POST:
+        if 'order_array' in request.POST:
             try:
                 request_files_object = RequestFiles.objects.get(csrf_id=request.POST['csrfmiddlewaretoken'])
+                if 'order_array' not in request.POST:
+                    raise ObjectDoesNotExist
             except ObjectDoesNotExist:
                 return HttpResponse("You haven't uploaded any files")
             if request_files_object:
                 print(f"request object is: {request_files_object}")
-                files_objects = request_files_object.uploaded_files.all()
+                order_array = request.POST['order_array'].split(',')
+                preserved = Case(*[When(uuid=uuid, then=pos) for pos, uuid in enumerate(order_array)])
+                files_objects = request_files_object.uploaded_files.filter(uuid__in=order_array).order_by(preserved)
                 files_list = [file.filename.name for file in files_objects]
                 print(files_list)
-                output_filename = merge_lib_call(files_list, request_files_object.csrf_id)
-                with open(output_filename, 'rb') as file_to_send:
-                    response = HttpResponse(file_to_send, 'application/x-gzip')
+                filesys_output_filename = merge_lib_call(files_list, request_files_object.csrf_id)
+                with open(filesys_output_filename, 'rb') as file_to_send:
+                    response = HttpResponse(file_to_send, 'text/html')
                     # response['Content-Length'] = file_to_send.size
-                    response['Content-Disposition'] = f'attachment; filename="{request_files_object.csrf_id}.pdf"'
-                    shutil.rmtree(f'uploads/{request_files_object.csrf_id}')
-                    os.remove(output_filename)
-                    request_files_object.delete()
+                    if request.POST['output_filename'] != '':
+                        save_filename = f"{request.POST['output_filename']}.pdf"
+                    else:
+                        save_filename = f"pdfWorks.org_{request_files_object.csrf_id[:8]}.pdf"
+                    response['Content-Disposition'] = f'attachment; filename="{save_filename}"'
+                    request_files_object.delete(output_filename=filesys_output_filename)
                 return response
         else:
             try:
@@ -51,11 +52,12 @@ def merge(request):
             except ObjectDoesNotExist:
                 request_files_object = RequestFiles(csrf_id=request.POST['csrfmiddlewaretoken'])
                 request_files_object.save()
-                print(f"new object created with sid {request_files_object.csrf_id}")
-            print(f"csrf_id: {request_files_object.csrf_id}")
             uploaded_file = UploadedFile(request_session=request_files_object)
             uploaded_file.filename.save(str(request.FILES['file']), ContentFile(request.FILES['file'].read()))
+            uploaded_file.uuid = request.POST['file_uuid']
             uploaded_file.save()
+            print(f"csrf_id: {request_files_object.csrf_id}")
+            print(f"file uploaded: {uploaded_file.filename} with uuid: {uploaded_file.uuid}")
     return render(request,
                   'website/merge.html',
                   {'section': 'merge'})
