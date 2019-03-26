@@ -12,3 +12,6 @@ class RemoveOldSessions(CronJobBase):
     def do(self):
         objs = RequestFiles.objects.filter(date_created__lt=timezone.now() - timezone.timedelta(minutes=1))
         [obj.delete() for obj in objs]
+
+def my_scheduled_job():
+    print("kek")
