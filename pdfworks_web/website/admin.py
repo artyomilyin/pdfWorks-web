@@ -1,7 +1,7 @@
+from django.conf import settings
 from django.contrib import admin
 from django.utils import timezone
 from .models import RequestFiles, UploadedFile
-from .cron import RemoveOldSessions
 
 
 class RequestFilesInlineAdmin(admin.TabularInline):
@@ -15,4 +15,4 @@ class RequestFilesAdmin(admin.ModelAdmin):
 
     def until_deleted(self, obj):
         minutes_since_added = ((timezone.now() - obj.date_created).seconds // 60) % 60
-        return "%s min" % (RemoveOldSessions.RUN_EVERY_MINS - minutes_since_added)
+        return "%s min" % (settings.REMOVE_OLD_SESSION - minutes_since_added)
