@@ -1,2 +1,6 @@
-TODO: SEO-friendly urls
-TODO: toasts with messages
+TODO: 1. SEO-friendly urls
+TODO: 2. toasts with messages
+TODO: 3. translations
+TODO: 4. SEO (depends on 1, 6)
+TODO: 5. favicon
+TODO: 6. cron doesn't work
