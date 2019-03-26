@@ -5,6 +5,8 @@
 
 {% block content %}
 <h3>Merge images and PDF files to a single PDF file.</h3>
+<p>This tool can easily convert your images to PDF files and merge them with other PDF files.
+	Just drop them in the field below.</p>
 <form action="/{{ section }}/" class="dropzone" method="post" id="merge-dropzone">
 	{% csrf_token %}
 </form>

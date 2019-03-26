@@ -1,10 +1,11 @@
 <script>
 Dropzone.options.splitDropzone = {
 	url: "/{{ section }}/",
-	paramName: "file", // The name that will be used to transfer the file
-  maxFiles: 1,
-  addRemoveLinks: true,
+	paramName: "file",
   acceptedFiles: '.pdf',
+	maxFilesize: 200,
+  dictDefaultMessage: 'Drop PDF files here to upload',
+  dictFileTooBig: 'Max file size is 200 Mb',
   dictInvalidFileType: 'Only PDF file can be uploaded',
 };
 

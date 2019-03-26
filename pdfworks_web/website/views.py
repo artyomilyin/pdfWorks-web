@@ -1,3 +1,4 @@
+import os
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from django.db.models import Case, When
@@ -16,7 +17,7 @@ def homepage(request):
 def merge(request):
     def merge_lib_call(input_files_list, output_filename):
         converter = Converter()
-        output = "output/%s.pdf" % output_filename
+        output = os.path.join('output', '%s.pdf' % output_filename)
         converter.convert(input_files_list, output)
         return output
 
@@ -50,7 +51,7 @@ def merge(request):
             try:
                 request_files_object = RequestFiles.objects.get(csrf_id=request.POST['csrfmiddlewaretoken'])
             except ObjectDoesNotExist:
-                request_files_object = RequestFiles(csrf_id=request.POST['csrfmiddlewaretoken'])
+                request_files_object = RequestFiles(csrf_id=request.POST['csrfmiddlewaretoken'], tool_type='merge')
                 request_files_object.save()
             uploaded_file = UploadedFile(request_session=request_files_object)
             uploaded_file.filename.save(str(request.FILES['file']), ContentFile(request.FILES['file'].read()))
@@ -64,40 +65,25 @@ def merge(request):
 
 
 def split(request):
-    def split_lib_call():
+    def split_lib_call(filename, csrf_id):
+        output_dir = os.path.join('output', csrf_id)
         converter = Converter()
-        converter.split_pdf()
+        converter.split_pdf(filename, output_dir)
+        print("splitted to dir %s")
 
     if request.method == "POST":
-        if 'submit' in request.POST:
-            try:
-                request_files_object = RequestFiles.objects.get(csrf_id=request.POST['csrfmiddlewaretoken'])
-            except ObjectDoesNotExist:
-                return HttpResponse("You haven't uploaded any files")
-            if request_files_object:
-                print("request object is: %s" % request_files_object)
-                files_list = [file.filename.name for file in request_files_object.uploaded_files.all()]
-                print(files_list)
-                # request_files_object.delete()
-                return HttpResponse("It's okay, files: %s" % files_list)
-        else:
-            try:
-                request_files_object = RequestFiles.objects.get(csrf_id=request.POST['csrfmiddlewaretoken'])
-            except ObjectDoesNotExist:
-                request_files_object = RequestFiles(csrf_id=request.POST['csrfmiddlewaretoken'])
-                request_files_object.save()
-                print("new object created with sid %s" % request_files_object.csrf_id)
-            print("csrf_id: %s" % request_files_object.csrf_id)
-            uploaded_file = UploadedFile(request_session=request_files_object)
-            uploaded_file.filename.save(str(request.FILES['file']), ContentFile(request.FILES['file'].read()))
-            uploaded_file.save()
+        try:
+            request_files_object = RequestFiles.objects.get(csrf_id=request.POST['csrfmiddlewaretoken'])
+        except ObjectDoesNotExist:
+            request_files_object = RequestFiles(csrf_id=request.POST['csrfmiddlewaretoken'], tool_type='split')
+            request_files_object.save()
+            print("new object created with sid %s" % request_files_object.csrf_id)
+        print("csrf_id: %s" % request_files_object.csrf_id)
+        uploaded_file = UploadedFile(request_session=request_files_object)
+        uploaded_file.filename.save(str(request.FILES['file']), ContentFile(request.FILES['file'].read()))
+        uploaded_file.save()
+        print(uploaded_file.filename)
 
     return render(request,
                   'website/split.html',
                   {'section': 'split'})
-
-
-def offline(request):
-    return render(request,
-                  'website/offline.html',
-                  {'section': 'offline'})

@@ -5,3 +5,4 @@ TODO: 4. SEO (depends on 1)
 TODO: 5. favicon
 TODO: 6. add session model to clear sessions
 TODO: 7. splitPDF
+TODO: 8. logging
