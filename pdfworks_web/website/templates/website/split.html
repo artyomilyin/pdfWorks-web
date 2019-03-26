@@ -1,9 +1,16 @@
 {% extends 'website/base.html' %}
+{% load static %}
 
 {% block title %}pdfWorks - Split PDF{% endblock %}
 
 {% block content %}
 <h3>Split single PDF page by page.</h3>
-<h4>Coming soon...</h4>
+<p>Just drop your PDF file to the field below and you'll get an archive with all its pages.</p>
+<form action="/{{ section }}/" class="dropzone" method="post" id="split-dropzone">
+	{% csrf_token %}
+</form>
+<button type="text" class="btn btn-primary" id="clear-dropzone">Clear the field</button>
 {% endblock %}
-
+{% block javascript %}
+<script src="{% static '/js/split_js_block.js' %}"></script>
+{% endblock %}
