@@ -35,11 +35,8 @@ MIDDLEWARE = [
 ]
 
 REMOVE_OLD_SESSION = 2
-CRONTAB_COMMAND_SUFFIX = '2>&1'
 CRONJOBS = [
-    ('*/%s * * * *' % REMOVE_OLD_SESSION,
-     'website.cron.remove_old_sessions', '>> %s'
-     % os.path.join(os.path.join(BASE_DIR, 'log'), 'remove_old_sessions.log'))
+    ('*/%s * * * *' % REMOVE_OLD_SESSION, 'website.cron.remove_old_sessions')
 ]
 ROOT_URLCONF = 'pdfworks_web.urls'
 
