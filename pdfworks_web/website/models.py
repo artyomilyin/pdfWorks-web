@@ -1,6 +1,6 @@
 import os
 import shutil
-
+from django.conf import settings
 from django.db import models
 
 
@@ -13,7 +13,8 @@ class RequestFiles(models.Model):
 
     def delete(self, output_filename=None, using=None, keep_parents=False):
         if self.uploaded_files:
-            shutil.rmtree('uploads/%s' % self.csrf_id)
+            dir_path = os.path.join(os.path.join(settings.BASE_DIR, 'uploads'), self.csrf_id)
+            shutil.rmtree(dir_path)
             if output_filename:
                 os.remove(output_filename)
         super(RequestFiles, self).delete(using=using, keep_parents=keep_parents)

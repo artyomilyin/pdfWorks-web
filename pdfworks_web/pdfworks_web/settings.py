@@ -35,6 +35,7 @@ MIDDLEWARE = [
 ]
 
 REMOVE_OLD_SESSION = 2
+CRONTAB_COMMAND_SUFFIX = '2>&1'
 CRONJOBS = [
     ('*/%s * * * *' % REMOVE_OLD_SESSION,
      'website.cron.remove_old_sessions', '>> %s'
