@@ -4,7 +4,7 @@ from .models import RequestFiles
 
 
 class RemoveOldSessions(CronJobBase):
-    RUN_EVERY_MINS = 0.5
+    RUN_EVERY_MINS = 1
 
     schedule = Schedule(run_every_mins=RUN_EVERY_MINS)
     code = 'website.remove_old_sessions'
