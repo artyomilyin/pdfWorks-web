@@ -21,7 +21,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'website',
-    'django_cron',
     'django_crontab',
 ]
 
@@ -35,11 +34,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CRON_CLASSES = [
-    "website.cron.RemoveOldSessions",
-]
+REMOVE_OLD_SESSION = 2
 CRONJOBS = [
-    ('*/1 * * * *', 'website.cron.my_scheduled_job')
+    ('*/%s * * * *' % REMOVE_OLD_SESSION, 'website.cron.remove_old_sessions')
 ]
 ROOT_URLCONF = 'pdfworks_web.urls'
 
