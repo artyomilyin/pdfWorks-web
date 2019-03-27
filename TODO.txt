@@ -8,3 +8,6 @@ TODO: 7. splitPDF
 TODO: 8. logging
 TODO: 9. png with alpha channel
 TODO: 10. relocate admin
+TODO: 11. content size header
+TODO: 12. feedback form
+TODO: 13. refactor code
