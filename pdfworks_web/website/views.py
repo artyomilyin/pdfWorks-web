@@ -1,4 +1,6 @@
 import os
+import zipfile
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from django.db.models import Case, When
@@ -67,9 +69,22 @@ def merge(request):
 def split(request):
     def split_lib_call(filename, csrf_id):
         output_dir = os.path.join('output', csrf_id)
+        rel_filename = os.path.join(os.path.join('uploads', csrf_id), filename)
+        if not os.path.exists(output_dir):
+            os.mkdir(output_dir)
         converter = Converter()
-        converter.split_pdf(filename, output_dir)
-        print("splitted to dir %s")
+        converter.split_pdf(rel_filename, output_dir)
+        zipf = zipfile.ZipFile(os.path.join(output_dir, '%s.zip' % filename), 'w', zipfile.ZIP_DEFLATED)
+        for root, dirs, files in os.walk(os.path.join(settings.BASE_DIR, output_dir)):
+            for file in files:
+                if file.endswith('.pdf'):
+                    print("l %s" % file)
+                    zipf.write(
+                        os.path.join(output_dir, file),
+                        os.path.relpath(os.path.join(output_dir, file), os.path.join(output_dir, '..'))
+                    )
+        zipf.close()
+        return zipf.filename
 
     if request.method == "POST":
         try:
@@ -79,10 +94,19 @@ def split(request):
             request_files_object.save()
             print("new object created with sid %s" % request_files_object.csrf_id)
         print("csrf_id: %s" % request_files_object.csrf_id)
+        uploaded_filename = str(request.FILES['file'])
         uploaded_file = UploadedFile(request_session=request_files_object)
-        uploaded_file.filename.save(str(request.FILES['file']), ContentFile(request.FILES['file'].read()))
+        uploaded_file.filename.save(uploaded_filename, ContentFile(request.FILES['file'].read()))
         uploaded_file.save()
-        print(uploaded_file.filename)
+        output_filename = split_lib_call(uploaded_filename, request_files_object.csrf_id)
+        print("zip: %s" % output_filename)
+        with open(output_filename, 'rb') as file_to_send:
+            response = HttpResponse(file_to_send, 'text/html')
+            # response['Content-Length'] = file_to_send.size
+            save_filename = "pdfWorks.org_%s.zip" % uploaded_filename
+            response['Content-Disposition'] = 'attachment; filename="%s"' % save_filename
+            # request_files_object.delete(output_filename=os.path.join('output', request_files_object.csrf_id))
+        return response
 
     return render(request,
                   'website/split.html',
