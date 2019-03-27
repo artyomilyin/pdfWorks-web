@@ -41,7 +41,6 @@ def merge(request):
                 filesys_output_filename = merge_lib_call(files_list, request_files_object.csrf_id)
                 with open(filesys_output_filename, 'rb') as file_to_send:
                     response = HttpResponse(file_to_send, 'text/html')
-                    # response['Content-Length'] = file_to_send.size
                     if request.POST['output_filename'] != '':
                         save_filename = "%s.pdf" % request.POST['output_filename']
                     else:
@@ -69,44 +68,55 @@ def merge(request):
 def split(request):
     def split_lib_call(filename, csrf_id):
         output_dir = os.path.join('output', csrf_id)
-        rel_filename = os.path.join(os.path.join('uploads', csrf_id), filename)
         if not os.path.exists(output_dir):
             os.mkdir(output_dir)
         converter = Converter()
-        converter.split_pdf(rel_filename, output_dir)
-        zipf = zipfile.ZipFile(os.path.join(output_dir, '%s.zip' % filename), 'w', zipfile.ZIP_DEFLATED)
+        converter.split_pdf(filename, output_dir)
+        zipf = zipfile.ZipFile(os.path.join(output_dir, '%s.zip' % csrf_id), 'w', zipfile.ZIP_DEFLATED)
         for root, dirs, files in os.walk(os.path.join(settings.BASE_DIR, output_dir)):
             for file in files:
                 if file.endswith('.pdf'):
-                    print("l %s" % file)
                     zipf.write(
                         os.path.join(output_dir, file),
-                        os.path.relpath(os.path.join(output_dir, file), os.path.join(output_dir, '..'))
+                        os.path.relpath(os.path.join(output_dir, file), output_dir)
                     )
         zipf.close()
         return zipf.filename
 
     if request.method == "POST":
-        try:
+        if request.is_ajax():
+            try:
+                request_files_object = RequestFiles.objects.get(csrf_id=request.POST['csrfmiddlewaretoken'])
+            except ObjectDoesNotExist:
+                request_files_object = RequestFiles(csrf_id=request.POST['csrfmiddlewaretoken'], tool_type='split')
+                request_files_object.save()
+                print("new object created with sid %s" % request_files_object.csrf_id)
+            print("csrf_id: %s" % request_files_object.csrf_id)
+            uploaded_filename = str(request.FILES['file'])
+            uploaded_file = UploadedFile(request_session=request_files_object)
+            uploaded_file.filename.save(uploaded_filename, ContentFile(request.FILES['file'].read()))
+            uploaded_file.save()
+            uploaded_filename = uploaded_file.filename.name
+            output_filename = split_lib_call(uploaded_filename, request_files_object.csrf_id)
+            print("zip: %s" % output_filename)
+        else:
             request_files_object = RequestFiles.objects.get(csrf_id=request.POST['csrfmiddlewaretoken'])
-        except ObjectDoesNotExist:
-            request_files_object = RequestFiles(csrf_id=request.POST['csrfmiddlewaretoken'], tool_type='split')
-            request_files_object.save()
-            print("new object created with sid %s" % request_files_object.csrf_id)
-        print("csrf_id: %s" % request_files_object.csrf_id)
-        uploaded_filename = str(request.FILES['file'])
-        uploaded_file = UploadedFile(request_session=request_files_object)
-        uploaded_file.filename.save(uploaded_filename, ContentFile(request.FILES['file'].read()))
-        uploaded_file.save()
-        output_filename = split_lib_call(uploaded_filename, request_files_object.csrf_id)
-        print("zip: %s" % output_filename)
-        with open(output_filename, 'rb') as file_to_send:
-            response = HttpResponse(file_to_send, 'text/html')
-            # response['Content-Length'] = file_to_send.size
-            save_filename = "pdfWorks.org_%s.zip" % uploaded_filename
-            response['Content-Disposition'] = 'attachment; filename="%s"' % save_filename
-            # request_files_object.delete(output_filename=os.path.join('output', request_files_object.csrf_id))
-        return response
+            output_filepath = os.path.join(
+                'output',
+                os.path.join(
+                    request_files_object.csrf_id,
+                    "%s.zip" % request_files_object.csrf_id
+                )
+            )
+            filename = request_files_object.uploaded_files.all()[0].filename.name
+            print("output_filepath is %s" % output_filepath)
+            print("filename is %s" % os.path.basename(filename))
+            with open(output_filepath, 'rb') as file_to_send:
+                response = HttpResponse(file_to_send, 'text/html')
+                save_filename = "%s_pdfWorks.org.zip" % filename
+                response['Content-Disposition'] = 'attachment; filename="%s"' % save_filename
+                request_files_object.delete(output_filename=os.path.join('output', request_files_object.csrf_id))
+            return response
 
     return render(request,
                   'website/split.html',

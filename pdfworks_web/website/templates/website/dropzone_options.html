@@ -4,9 +4,29 @@ Dropzone.options.splitDropzone = {
 	paramName: "file",
   acceptedFiles: '.pdf',
 	maxFilesize: 200,
+	parallelUploads: 1,
   dictDefaultMessage: 'Drop PDF files here to upload',
   dictFileTooBig: 'Max file size is 200 Mb',
   dictInvalidFileType: 'Only PDF file can be uploaded',
+
+	init: function() {
+    this.on("success", function(e) {
+      dz = $('#split-dropzone')
+      dz.submit()
+      dz.attr("processing", "false")
+    });
+    this.on("processing", function(file, xhr, form) {
+	    function sleep(ms) {
+			  return new Promise(resolve => setTimeout(resolve, ms));
+			}
+      dz = $('#split-dropzone')
+      while (dz.attr("processing") == "true"){
+        console.log("still busy");
+        sleep(1000);
+      }
+      dz.attr("processing", "true")
+    });
+  }
 };
 
 Dropzone.options.mergeDropzone = {
