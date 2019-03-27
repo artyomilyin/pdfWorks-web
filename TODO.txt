@@ -6,3 +6,5 @@ TODO: 5. favicon
 TODO: 6. add session model to clear sessions
 TODO: 7. splitPDF
 TODO: 8. logging
+TODO: 9. png with alpha channel
+TODO: 10. relocate admin

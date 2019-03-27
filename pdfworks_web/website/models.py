@@ -18,12 +18,18 @@ class RequestFiles(models.Model):
         return "%s request" % self.csrf_id
 
     def delete(self, output_filename=None, using=None, keep_parents=False):
-        if self.tool_type == 'merge':
-            if self.uploaded_files:
+        if self.uploaded_files:
+            if self.tool_type == 'merge':
                 dir_path = os.path.join(os.path.join(settings.BASE_DIR, 'uploads'), self.csrf_id)
                 shutil.rmtree(dir_path)
                 if output_filename:
                     os.remove(output_filename)
+            elif self.tool_type == 'split':
+                dir_path = os.path.join(os.path.join(settings.BASE_DIR, 'uploads'), self.csrf_id)
+                shutil.rmtree(dir_path)
+                if output_filename:
+                    shutil.rmtree(output_filename)
+
         super(RequestFiles, self).delete(using=using, keep_parents=keep_parents)
 
     class Meta:
