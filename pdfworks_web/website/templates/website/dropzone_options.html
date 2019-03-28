@@ -2,6 +2,7 @@
 Dropzone.options.splitDropzone = {
 	url: "/{{ section }}/",
 	paramName: "file",
+	timeout: 300000,
   acceptedFiles: '.pdf',
 	maxFilesize: 200,
 	parallelUploads: 1,
@@ -10,21 +11,28 @@ Dropzone.options.splitDropzone = {
   dictInvalidFileType: 'Only PDF file can be uploaded',
 
 	init: function() {
+    this.on("addedfile", function(file) {
+      el = $(file.previewElement);
+      el.attr("file_uuid", uuidv1());
+    });
+    this.on("sending", function(file, xhr, form) {
+      el = $(file.previewElement);
+      form.set("file_uuid", el.attr("file_uuid"));
+    });
     this.on("success", function(e) {
-      dz = $('#split-dropzone')
-      dz.submit()
-      dz.attr("processing", "false")
+      dz = $('#split-dropzone');
+      dz.find('input[name="file_uuid"]').remove()
+      file_uuid = $(e.previewElement).attr("file_uuid");
+      file_uuid_input = $('<input />').attr('type', 'hidden')
+															        .attr('id', 'file_uuid')
+															        .attr('name', 'file_uuid')
+															        .attr('value', file_uuid);
+      file_uuid_input.appendTo('#split-dropzone');
+      dz.submit();
+      file_uuid_input.remove();
     });
     this.on("processing", function(file, xhr, form) {
-	    function sleep(ms) {
-			  return new Promise(resolve => setTimeout(resolve, ms));
-			}
       dz = $('#split-dropzone')
-      while (dz.attr("processing") == "true"){
-        console.log("still busy");
-        sleep(1000);
-      }
-      dz.attr("processing", "true")
     });
   }
 };
@@ -32,6 +40,7 @@ Dropzone.options.splitDropzone = {
 Dropzone.options.mergeDropzone = {
 	url: "/{{ section }}/",
 	paramName: "file",
+	timeout: 90000,
 	maxFilesize: 200,
 	maxFiles: 20,
   addRemoveLinks: true,

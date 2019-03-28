@@ -6,6 +6,7 @@
 {% block content %}
 <h3>Split single PDF page by page.</h3>
 <p>Just drop your PDF file to the field below and you'll get an archive with all its pages.</p>
+<p>Please notice that processing may take some time.</p>
 <form action="/{{ section }}/" class="dropzone" method="post" id="split-dropzone">
 	{% csrf_token %}
 </form>
