@@ -1,3 +1,4 @@
+import hashlib
 import os
 import shutil
 from django.conf import settings
@@ -39,6 +40,11 @@ class RequestFiles(models.Model):
 class UploadedFile(models.Model):
 
     def define_upload_path(self, filename):
+        if self.request_session.tool_type == 'split':
+            string_to_hash = "%s_%s" % (self.request_session.csrf_id, filename)
+            self.unq_dir_name = hashlib.sha1(string_to_hash.encode('utf-8')).hexdigest()
+        elif self.request_session.tool_type == 'merge':
+            self.unq_dir_name = self.request_session.csrf_id
         return "uploads/%s/%s" % (self.request_session.csrf_id, filename)
 
     request_session = models.ForeignKey(RequestFiles, on_delete=models.CASCADE, related_name='uploaded_files')
