@@ -1,16 +1,46 @@
 <script>
 Dropzone.options.splitDropzone = {
 	url: "/{{ section }}/",
-	paramName: "file", // The name that will be used to transfer the file
-  maxFiles: 1,
-  addRemoveLinks: true,
+	paramName: "file",
+	timeout: 300000,
   acceptedFiles: '.pdf',
+	maxFilesize: 200,
+	parallelUploads: 1,
+  dictDefaultMessage: 'Drop PDF files here to upload',
+  dictFileTooBig: 'Max file size is 200 Mb',
   dictInvalidFileType: 'Only PDF file can be uploaded',
+
+	init: function() {
+    this.on("addedfile", function(file) {
+      el = $(file.previewElement);
+      el.attr("file_uuid", uuidv1());
+    });
+    this.on("sending", function(file, xhr, form) {
+      el = $(file.previewElement);
+      form.set("file_uuid", el.attr("file_uuid"));
+    });
+    this.on("success", function(e) {
+      dz = $('#split-dropzone');
+      dz.find('input[name="file_uuid"]').remove()
+      file_uuid = $(e.previewElement).attr("file_uuid");
+      file_uuid_input = $('<input />').attr('type', 'hidden')
+															        .attr('id', 'file_uuid')
+															        .attr('name', 'file_uuid')
+															        .attr('value', file_uuid);
+      file_uuid_input.appendTo('#split-dropzone');
+      dz.submit();
+      file_uuid_input.remove();
+    });
+    this.on("processing", function(file, xhr, form) {
+      dz = $('#split-dropzone')
+    });
+  }
 };
 
 Dropzone.options.mergeDropzone = {
 	url: "/{{ section }}/",
 	paramName: "file",
+	timeout: 90000,
 	maxFilesize: 200,
 	maxFiles: 20,
   addRemoveLinks: true,

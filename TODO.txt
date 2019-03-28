@@ -1,6 +1,13 @@
 TODO: 1. SEO-friendly urls
 TODO: 2. toasts with messages
 TODO: 3. translations
-TODO: 4. SEO (depends on 1, 6)
+TODO: 4. SEO (depends on 1)
 TODO: 5. favicon
-TODO: 6. cron doesn't work
+TODO: 6. add session model to clear sessions
+TODO: 7. splitPDF
+TODO: 8. logging
+TODO: 9. png with alpha channel
+TODO: 10. relocate admin
+TODO: 11. content size header
+TODO: 12. feedback form
+TODO: 13. refactor code
