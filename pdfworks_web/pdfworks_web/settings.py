@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',
     'website',
     'django_crontab',
 ]
@@ -34,7 +35,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-REMOVE_OLD_SESSION = 2
+REMOVE_OLD_SESSION = 4
 CRONTAB_COMMAND_SUFFIX = '2>&1'
 CRONJOBS = [
     ('*/%s * * * *' % REMOVE_OLD_SESSION,
