@@ -26,6 +26,14 @@
 	<script src="{% static '/js/dropzone.js' %}"></script>
 	<script src="{% static '/js/uuid_v1.js' %}"></script>
 	{% include 'website/dropzone_options.html' %}
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-137248689-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-137248689-1');
+	</script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
