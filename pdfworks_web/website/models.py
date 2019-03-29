@@ -30,7 +30,6 @@ class RequestFiles(models.Model):
                 shutil.rmtree(dir_path)
                 if output_filename:
                     shutil.rmtree(output_filename)
-
         super(RequestFiles, self).delete(using=using, keep_parents=keep_parents)
 
     class Meta:
