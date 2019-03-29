@@ -1,7 +1,7 @@
+__pycache__
 .venv/
 .idea/
 pdfworks_web/db.sqlite3
 pdfworks_web/migrations
-pdfworks_web/pdfworks_web/local_settings.py
 pdfworks_web/static
-__pycache__
+pdfworks_web/pdfworks_web/local_settings.py
