@@ -62,8 +62,7 @@ def merge(request):
             print("csrf_id: %s" % request_files_object.csrf_id)
             print("file uploaded: %s with uuid: %s" % (uploaded_file.filename, uploaded_file.uuid))
     return render(request,
-                  'website/merge.html',
-                  {'section': 'merge'})
+                  'website/merge.html')
 
 
 def split(request):
@@ -114,5 +113,4 @@ def split(request):
             return response
 
     return render(request,
-                  'website/split.html',
-                  {'section': 'split'})
+                  'website/split.html')

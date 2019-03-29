@@ -1,6 +1,6 @@
 <script>
 Dropzone.options.splitDropzone = {
-	url: "/{{ section }}/",
+	url: "{% url 'website:split' %}",
 	paramName: "file",
 	timeout: 300000,
   acceptedFiles: '.pdf',
@@ -38,7 +38,7 @@ Dropzone.options.splitDropzone = {
 };
 
 Dropzone.options.mergeDropzone = {
-	url: "/{{ section }}/",
+	url: "{% url 'website:merge' %}",
 	paramName: "file",
 	timeout: 90000,
 	maxFilesize: 200,
