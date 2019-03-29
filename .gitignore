@@ -1,6 +1,7 @@
 __pycache__
 .venv/
 .idea/
+gunicorn.conf
 pdfworks_web/db.sqlite3
 pdfworks_web/website/migrations
 pdfworks_web/static
