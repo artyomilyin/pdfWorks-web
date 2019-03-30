@@ -7,7 +7,7 @@ class PdfworksSitemap(Sitemap):
     priority = 0.9
 
     def items(self):
-        return ['website:merge', 'website:split']
+        return ['website:homepage', 'website:merge', 'website:split']
 
     def location(self, item):
         return reverse(item)

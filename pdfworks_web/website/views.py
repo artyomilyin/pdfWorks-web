@@ -14,7 +14,8 @@ from .models import RequestFiles, UploadedFile
 
 
 def homepage(request):
-    return redirect('merge/')
+    return render(request,
+                  'website/homepage.html')
 
 
 def merge(request):
