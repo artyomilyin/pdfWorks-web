@@ -6,11 +6,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from django.db.models import Case, When
 from django.http.response import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 
 from .lib.pdfworks_lib.pdfworks import Converter
 
-from .models import RequestFiles, UploadedFile
+from .models import RequestFiles, UploadedFile, Statistic
 
 
 def homepage(request):
@@ -49,6 +49,9 @@ def merge(request):
                         save_filename = "pdfWorks.org_%s.pdf" % request_files_object.csrf_id[:8]
                     response['Content-Disposition'] = 'attachment; filename="%s"' % save_filename
                     request_files_object.delete(output_filename=filesys_output_filename)
+                    Statistic.objects.create(output_filename=save_filename,
+                                             tool_type='merge',
+                                             ip_address=request.META.get('REMOTE_ADDR', 'unknown')).save()
                 return response
         else:
             try:
@@ -111,6 +114,9 @@ def split(request):
                 save_filename = "%s_pdfWorks.org.zip" % filename
                 response['Content-Disposition'] = 'attachment; filename="%s"' % save_filename
                 request_files_object.delete(output_filename=os.path.join('output', request_files_object.csrf_id))
+                Statistic.objects.create(output_filename=save_filename,
+                                         tool_type='split',
+                                         ip_address=request.META.get('REMOTE_ADDR', 'unknown')).save()
             return response
 
     return render(request,
