@@ -51,7 +51,7 @@ def merge(request):
                     request_files_object.delete(output_filename=filesys_output_filename)
                     Statistic.objects.create(output_filename=save_filename,
                                              tool_type='merge',
-                                             ip_address=request.META.get('REMOTE_ADDR', 'unknown')).save()
+                                             ip_address=request.META.get('HTTP_X_REAL_IP', 'unknown')).save()
                 return response
         else:
             try:
@@ -116,7 +116,7 @@ def split(request):
                 request_files_object.delete(output_filename=os.path.join('output', request_files_object.csrf_id))
                 Statistic.objects.create(output_filename=save_filename,
                                          tool_type='split',
-                                         ip_address=request.META.get('REMOTE_ADDR', 'unknown')).save()
+                                         ip_address=request.META.get('HTTP_X_REAL_IP', 'unknown')).save()
             return response
 
     return render(request,
