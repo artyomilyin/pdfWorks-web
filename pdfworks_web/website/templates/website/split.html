@@ -1,16 +1,17 @@
 {% extends 'website/base.html' %}
 {% load static %}
+{% load i18n %}
 
-{% block title %}pdfWorks - Split PDF{% endblock %}
+{% block title %}pdfWorks - {% trans "Split PDF" %}{% endblock %}
 
 {% block content %}
-<h3>Split single PDF page by page.</h3>
-<p>Just drop your PDF file to the field below and you'll get an archive with all its pages.</p>
-<p>Please notice that processing may take some time.</p>
+<h3>{% trans "Split single PDF page by page." %}</h3>
+<p>{% trans "Just drop your PDF file to the field below and you'll get an archive with all its pages." %}</p>
+<p>{% trans "Please notice that processing may take some time." %}</p>
 <form action="{% url 'website:split' %}" class="dropzone" method="post" id="split-dropzone">
 	{% csrf_token %}
 </form>
-<button type="text" class="btn btn-primary" id="clear-dropzone">Clear the field</button>
+<button type="text" class="btn btn-primary" id="clear-dropzone">{% trans "Clear the field" %}</button>
 {% endblock %}
 {% block javascript %}
 <script src="{% static '/js/split_js_block.js' %}"></script>

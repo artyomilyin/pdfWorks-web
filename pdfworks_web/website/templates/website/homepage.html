@@ -1,29 +1,31 @@
 {% extends 'website/base.html' %}
+{% load i18n %}
 
-{% block title %}pdfWorks - Images and PDF converter{% endblock %}
+{% block title %}pdfWorks - {% trans "Images and PDF converter" %}{% endblock %}
 
 {% block content %}
-<h2>Universal light tool for PDF files operations.</h2>
+<h2>{% trans "Universal light tool for PDF files operations." %}</h2>
 <p></p>
 <div class="container">
-	<h4 class="text-center">Choose your weapon:</h4>
+	<h4 class="text-center">{% trans "Choose your weapon:" %}</h4>
 	<div class="row d-flex mt-3">
 		<div class="col-sm-6 flex-column">
 			<div class="card h-100">
 				<div class="card-body">
-					<h5 class="card-title">Merge tool</h5>
-					<p class="card-text">You can easily convert your images and some PDF files to merge them into one single
-						PDF.</p>
-					<a href="{% url 'website:merge' %}" class="btn btn-primary w-100">Go to merge tool</a>
+					<h5 class="card-title">{% trans "Merge tool" %}</h5>
+					<p class="card-text">
+						{% trans "You can easily convert your images and some PDF files to merge them into one single PDF." %}
+					</p>
+					<a href="{% url 'website:merge' %}" class="btn btn-primary w-100">{% trans "Go to merge tool" %}</a>
 				</div>
 			</div>
 		</div>
 		<div class="col-sm-6 flex-column">
 			<div class="card h-100">
 				<div class="card-body">
-					<h5 class="card-title">Split tool</h5>
-					<p class="card-text">Or you can split your PDF file page by page into one zip archive.</p>
-					<a href="{% url 'website:split' %}" class="btn btn-primary w-100">Go to split tool</a>
+					<h5 class="card-title">{% trans "Split tool" %}</h5>
+					<p class="card-text">{% trans "Or you can split your PDF file page by page into one zip archive." %}</p>
+					<a href="{% url 'website:split' %}" class="btn btn-primary w-100">{% trans "Go to split tool" %}</a>
 				</div>
 			</div>
 		</div>

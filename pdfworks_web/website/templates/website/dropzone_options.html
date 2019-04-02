@@ -1,3 +1,4 @@
+{% load i18n %}
 <script>
 Dropzone.options.splitDropzone = {
 	url: "{% url 'website:split' %}",
@@ -6,9 +7,9 @@ Dropzone.options.splitDropzone = {
   acceptedFiles: '.pdf',
 	maxFilesize: 200,
 	parallelUploads: 1,
-  dictDefaultMessage: 'Drop PDF files here to upload',
-  dictFileTooBig: 'Max file size is 200 Mb',
-  dictInvalidFileType: 'Only PDF file can be uploaded',
+  dictDefaultMessage: '{% trans "Drop PDF files here to upload" %}',
+  dictFileTooBig: '{% trans "Max file size is 200 Mb" %}',
+  dictInvalidFileType: '{% trans "Only PDF file can be uploaded" %}',
 
 	init: function() {
     this.on("addedfile", function(file) {
@@ -46,10 +47,10 @@ Dropzone.options.mergeDropzone = {
   addRemoveLinks: true,
   acceptedFiles: '.pdf, .jpg, .jpeg, .png',
 
-  dictInvalidFileType: 'Only [.pdf, .jpg, .jpeg, .png] files can be uploaded',
-  dictDefaultMessage: 'Drop files here to upload',
-  dictFileTooBig: 'Max file size is 200 Mb',
-  dictMaxFilesExceeded: 'You can upload 20 files only',
+  dictInvalidFileType: '{% trans "Only [.pdf, .jpg, .jpeg, .png] files can be uploaded" %}',
+  dictDefaultMessage: '{% trans "Drop files here to upload" %}',
+  dictFileTooBig: '{% trans "Max file size is 200 Mb" %}',
+  dictMaxFilesExceeded: '{% trans "You can upload 20 files only" %}',
 
   init: function() {
     this.on("addedfile", function(file) {

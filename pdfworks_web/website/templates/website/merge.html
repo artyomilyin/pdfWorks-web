@@ -1,23 +1,24 @@
 {% extends 'website/base.html' %}
 {% load static %}
+{% load i18n %}
 
-{% block title %}pdfWorks - Images and PDF converter{% endblock %}
+{% block title %}pdfWorks - {% trans "Merge images and PDF" %}{% endblock %}
 
 {% block content %}
-<h3>Merge images and PDF files to a single PDF file.</h3>
-<p>This tool can easily convert your images to PDF files and merge them with other PDF files.
-	Just drop them in the field below.</p>
+<h3>{% trans "Merge images and PDF files to a single PDF file." %}</h3>
+<p>{% trans "This tool can easily convert your images to PDF files and merge them with other PDF files." %}
+	{% trans "Just drop them in the field below." %}</p>
 <form action="{% url 'website:merge' %}" class="dropzone" method="post" id="merge-dropzone">
 	{% csrf_token %}
 </form>
 <div class="row p-3">
 	<button id="merge-dropzone-submit-btn" class="col btn btn-primary disabled"
 	        rel="tooltip" data-title="Upload some files first"
-	        type="submit" form="merge-dropzone">Convert and merge</button>
+	        type="submit" form="merge-dropzone">{% trans "Convert and merge" %}</button>
 	<div class="col-9 pr-0">
-		<label for="output_filename">Output filename:</label>
+		<label for="output_filename">{% trans "Output filename:" %}</label>
 		<input type="text" class="form-control" id="output_filename" name="output_filename"
-		       placeholder="without extension, leave empty for default" form="merge-dropzone">
+		       placeholder="{% trans 'without extension, leave empty for default' %}" form="merge-dropzone">
 	</div>
 </div>
 {% endblock %}

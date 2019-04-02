@@ -15,7 +15,8 @@ from .models import RequestFiles, UploadedFile, Statistic
 
 def homepage(request):
     return render(request,
-                  'website/homepage.html')
+                  'website/homepage.html',
+                  {'section': 'homepage'})
 
 
 def merge(request):
@@ -66,7 +67,8 @@ def merge(request):
             print("csrf_id: %s" % request_files_object.csrf_id)
             print("file uploaded: %s with uuid: %s" % (uploaded_file.filename, uploaded_file.uuid))
     return render(request,
-                  'website/merge.html')
+                  'website/merge.html',
+                  {'section': 'merge'})
 
 
 def split(request):
@@ -120,4 +122,5 @@ def split(request):
             return response
 
     return render(request,
-                  'website/split.html')
+                  'website/split.html',
+                  {'section': 'split'})
