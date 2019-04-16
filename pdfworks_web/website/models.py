@@ -55,12 +55,15 @@ class UploadedFile(models.Model):
 
 
 class Statistic(models.Model):
+    """
+    Model for gathering some statistics of website usage
+    """
     TOOL_TYPE_CHOICES = [
         ('merge', 'merge'),
         ('split', 'split'),
     ]
 
-    tool_type = tool_type = models.CharField(max_length=200, choices=TOOL_TYPE_CHOICES)
+    tool_type = models.CharField(max_length=200, choices=TOOL_TYPE_CHOICES)
     output_filename = models.CharField(max_length=200)
     ip_address = models.CharField(max_length=16)
     date_created = models.DateTimeField(auto_now_add=True)
