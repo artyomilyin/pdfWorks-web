@@ -9,7 +9,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
-ALLOWED_HOSTS = ['pdfworks.org', 'artyomilyin.org']
+ALLOWED_HOSTS = ['pdfworks.org', 'pdfworks.artyomilyin.org']
 if DEBUG:
     ALLOWED_HOSTS += ['127.0.0.1']
 
