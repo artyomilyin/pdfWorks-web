@@ -1,5 +1,7 @@
 import os
-from .local_settings import SECRET_KEY, DEBUG
+
+DEBUG = os.environ.get('DEBUG', False)
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -7,7 +9,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
-ALLOWED_HOSTS = ['pdfworks.org']
+ALLOWED_HOSTS = ['pdfworks.org', 'artyomilyin.org']
 if DEBUG:
     ALLOWED_HOSTS += ['127.0.0.1']
 
