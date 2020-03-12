@@ -1,1 +1,1 @@
-web: gunicorn pdfworks_web.pdfworks_web.wsgi
+web: gunicorn pdfworks_web.wsgi
