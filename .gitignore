@@ -1,6 +1,7 @@
 __pycache__
 .venv/
 .idea/
+.vscode/
 gunicorn.conf
 pdfworks_web/db.sqlite3
 pdfworks_web/website/migrations
