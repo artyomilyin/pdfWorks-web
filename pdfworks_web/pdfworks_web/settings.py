@@ -40,6 +40,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 REMOVE_OLD_SESSION = 4
@@ -50,6 +51,8 @@ CRONJOBS = [
      % os.path.join(os.path.join(BASE_DIR, 'log'), 'remove_old_sessions.log'))
 ]
 ROOT_URLCONF = 'pdfworks_web.urls'
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 TEMPLATES = [
     {
